@@ -1,0 +1,17 @@
+# ── Core dependencies ─────────────────────────────────────────────────────────
+python-dotenv>=1.0.0      # .env file loading
+pyyaml>=6.0.1             # YAML template loading
+aiohttp>=3.9.0            # Async HTTP client for API calls
+httpx>=0.27.0             # Alternative async HTTP client
+
+# ── PDF processing (for book ingestion) ──────────────────────────────────────
+pdfminer.six>=20221105    # PDF to text extraction (primary)
+pymupdf>=1.24.0           # PDF to text extraction (fallback, faster)
+
+# ── Report generation ─────────────────────────────────────────────────────────
+markdown>=3.5.0           # Markdown to HTML conversion
+weasyprint>=62.0          # HTML/CSS to PDF generation
+
+# ── Optional: Web UI ──────────────────────────────────────────────────────────
+# Uncomment to enable the Gradio web interface:
+# gradio>=4.0.0

@@ -1,0 +1,43 @@
+# ════════════════════════════════════════════════════════════
+# KaosExtract — .gitignore
+# ════════════════════════════════════════════════════════════
+
+# ── Secrets ──────────────────────────────────────────────────
+.env
+*.env.local
+
+# ── Python ───────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ── Virtual environment ───────────────────────────────────────
+venv/
+.venv/
+env/
+
+# ── User books and sources (private data) ─────────────────────
+upload/
+!upload/.gitkeep
+
+# ── Generated outputs ─────────────────────────────────────────
+output/
+!output/.gitkeep
+*.pdf
+
+# ── Logs ─────────────────────────────────────────────────────
+*.log
+logs/
+
+# ── IDEs ──────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db

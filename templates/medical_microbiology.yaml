@@ -1,0 +1,219 @@
+# ════════════════════════════════════════════════════════════════════════════
+# KaosExtract Template: Medical Microbiology
+# ════════════════════════════════════════════════════════════════════════════
+# This template defines the extraction modules for medical microbiology entities
+# (bacteria and viruses). Each module generates a focused section of the final report.
+#
+# HOW IT WORKS:
+#   1. The pipeline uses entity_label to know what kind of thing it's looking for
+#   2. Each module is processed in parallel, divided into sections
+#   3. Sections are synthesized into a coherent module, then QC-checked offline
+#
+# CUSTOMIZATION:
+#   - Add/remove modules as needed
+#   - Edit section directives to focus on what matters for your domain
+#   - Use {ENTITY} as placeholder for the entity name in directives
+#   - Supported languages: "es" (Spanish), "en" (English)
+# ════════════════════════════════════════════════════════════════════════════
+
+name: "Medical Microbiology"
+version: "2.0"
+language: "es"
+entity_label: "bacteria or virus"
+output_language: "Spanish Medical Technical"
+
+system_prompt: >
+  Eres Kaos, experto en microbiología médica clínica de nivel universitario avanzado.
+  Generas secciones de análisis microbiológico con máxima profundidad técnica.
+  Narrativa médica técnica continua, sin introducción ni cierre.
+  Cada párrafo denso en información molecular y clínica.
+  PROHIBIDO listas genéricas. PROHIBIDO resumir. SOLO información técnica profunda.
+
+synthesis_prompt: >
+  Eres Kaos-Synth, sintetizador maestro de microbiología clínica.
+  Recibes secciones especializadas generadas en paralelo y las unificas en UN documento
+  coherente de tratado médico universitario.
+  OBLIGATORIO: conservar TODA la información técnica. Eliminar solo duplicaciones exactas.
+  Mantener headers Markdown del template. Tablas perfectamente formateadas.
+  Narrativa en Español Médico Técnico, sin bullets genéricos.
+
+modules:
+  - id: 1
+    name: "Etiología y Estructura"
+    complexity: "standard"
+    sections:
+      - id: "TAX"
+        directive: >
+          Clasificación taxonómica completa: Familia, Género, Especie, subtipos/serotipos.
+          Para virus: posición en Baltimore (I-VII). Nombre científico vs. nombres comunes regionales.
+          Historia del descubrimiento si es relevante clínicamente.
+      - id: "GEN"
+        directive: >
+          Material genético: tipo (DNA/RNA), polaridad, segmentación, tamaño.
+          Para bacterias: cromosoma + plásmidos. Islas de patogenicidad conocidas.
+          Para virus: organización genómica, regiones no codificantes, capacidad de codificación.
+      - id: "STR"
+        directive: >
+          Estructura: componentes de la pared celular / cápside / envoltura.
+          Proteínas estructurales clave con función molecular precisa.
+          Factores superficiales determinantes de tropismo y virulencia.
+      - id: "MET"
+        directive: >
+          Metabolismo y requerimientos de cultivo (bacterias): aerobio/anaerobio/facultativo,
+          temperatura óptima, medios selectivos, características tintoriales (Gram, Ziehl-Neelsen, etc.).
+          Para virus: ciclo replicativo resumido, receptor celular primario.
+      - id: "UNI"
+        directive: >
+          Particularidades únicas de {ENTITY} dentro de su grupo taxonómico.
+          Comparación con microorganismos relacionados. Características que lo hacen clínicamente especial.
+          Mecanismos de variación genética (mutación, recombinación, deriva antigénica).
+
+  - id: 2
+    name: "Epidemiología"
+    complexity: "standard"
+    sections:
+      - id: "RES"
+        directive: >
+          Reservorio(s): natural, accidental, amplificador. Distribución geográfica con énfasis
+          en Latinoamérica. Incidencia y prevalencia actuales con cifras reales.
+      - id: "TRA"
+        directive: >
+          Transmisión: vía(s), mecanismo exacto (fecal-oral, gotitas, aerosol, vectorial, etc.),
+          dosis infectante (ID50 si se conoce), período de contagiosidad.
+      - id: "POB"
+        directive: >
+          Población susceptible: grupos de riesgo con justificación fisiopatológica.
+          Factores de riesgo individuales y ambientales. Inmunidad de grupo si aplica.
+      - id: "BRO"
+        directive: >
+          Patrón epidemiológico: endémico/epidémico/pandémico. Estacionalidad y su base biológica.
+          Brotes históricos relevantes con lecciones aprendidas. Tendencia actual (en ascenso/descenso).
+
+  - id: 3
+    name: "Virulencia y Patogénesis"
+    complexity: "standard"
+    sections:
+      - id: "FAC"
+        directive: >
+          Factores de virulencia: nombre exacto, gen codificante, mecanismo molecular de acción,
+          consecuencia clínica directa. Tabla: factor → función → resultado clínico.
+      - id: "TOX"
+        directive: >
+          Toxinas (si aplica): tipo (exotoxina/endotoxina/superantígeno), receptor celular,
+          mecanismo de intoxicación paso a paso, dosis letal, antídoto si existe.
+      - id: "PAT"
+        directive: >
+          Patogénesis: desde la puerta de entrada hasta la manifestación clínica.
+          Adherencia → invasión → evasión inmune → daño tisular. Correlato molecular-clínico.
+      - id: "EVM"
+        directive: >
+          Evasión inmune: mecanismos moleculares con el gen responsable.
+          Inhibición de complemento, fagocitosis, presentación antigénica, anticuerpos.
+          Por qué el microorganismo puede persistir a pesar de la respuesta inmune.
+
+  - id: 4
+    name: "Fisiopatología y Clínica"
+    complexity: "complex"
+    sections:
+      - id: "FIS"
+        directive: >
+          Fisiología basal del tejido/órgano diana de {ENTITY}: funciones homeostáticas normales.
+          Qué procesos moleculares específicos serán interrumpidos y cómo eso produce la clínica.
+      - id: "CLI"
+        directive: >
+          Manifestaciones clínicas: síndrome(s) clínico(s) principales con descripción semiológica.
+          Cada síntoma/signo explicado por el mecanismo patogénico correspondiente.
+          Signos patognomónicos y su base molecular.
+      - id: "COM"
+        directive: >
+          Complicaciones: cuándo, por qué, en quién. Morbimortalidad con cifras.
+          Factores de mal pronóstico. Secuelas tardías si aplican.
+      - id: "DIF"
+        directive: >
+          Diagnóstico diferencial: entidades que se confunden con {ENTITY}.
+          Claves clínicas para diferenciación. Cuándo sospechar vs. descartar.
+
+  - id: 5
+    name: "Diagnóstico"
+    complexity: "standard"
+    sections:
+      - id: "PRE"
+        directive: >
+          Pre-analítica: muestra de elección según fase de la enfermedad.
+          Condiciones de toma, transporte, conservación. Errores frecuentes pre-analíticos.
+          Ventana diagnóstica por método.
+      - id: "DIR"
+        directive: >
+          Métodos directos: cultivo (medios, condiciones, tiempo, interpretación),
+          microscopía (tinción, morfología característica), PCR/RT-PCR (gen diana, sensibilidad, especificidad),
+          antígenos directos. Tabla comparativa de métodos directos.
+      - id: "SER"
+        directive: >
+          Serología: anticuerpos detectados (IgM/IgG/IgA), cinética de aparición,
+          significado de cada patrón, limitaciones (reactividad cruzada, ventana serológica).
+          Cuándo usar serología vs. método directo.
+      - id: "INT"
+        directive: >
+          Interpretación integrada: cómo combinar resultados de laboratorio con la clínica.
+          Criterios de confirmación de caso. Criterios de curación microbiológica.
+
+  - id: 6
+    name: "Tratamiento y Prevención"
+    complexity: "standard"
+    sections:
+      - id: "ATB"
+        directive: >
+          Antimicrobianos/antivirales: tabla (fármaco / clase / diana molecular / espectro /
+          dosis estándar / duración / resistencias documentadas). Primera línea vs. alternativas.
+          Situaciones especiales (embarazo, insuficiencia renal, pediatría).
+      - id: "RES"
+        directive: >
+          Resistencias: mecanismos moleculares de resistencia documentados en {ENTITY}.
+          Genes de resistencia, plásmidos, integrones si aplica. Epidemiología de la resistencia.
+          Impacto clínico y qué hacer cuando fracasa el tratamiento de primera línea.
+      - id: "SOP"
+        directive: >
+          Tratamiento de soporte: justificación fisiológica de cada medida.
+          Hidratación, soporte ventilatorio, analgesia, etc. — por qué tiene coherencia molecular.
+          Criterios de hospitalización vs. manejo ambulatorio.
+      - id: "PRV"
+        directive: >
+          Prevención: vacuna (tipo, antígeno, esquema, eficacia, KIPI comunes).
+          Impacto epidemiológico con cifras reales. Quimioprofilaxis pre/post-exposición.
+          Medidas de control ambiental y de salud pública. Notificación obligatoria si aplica.
+
+# ── Aliases de búsqueda por dominio ──────────────────────────────────────────
+# Estos aliases se usan en el Dense Window Algorithm para encontrar el capítulo correcto.
+# Formato: "nombre_canónico": ["alias1", "alias2", ...]
+# Agrega los microorganismos relevantes para tu caso de uso.
+search_aliases:
+  "streptococcus pyogenes":
+    - "estreptococo piogeno"
+    - "estreptococo beta hemolitico del grupo a"
+    - "strep grupo a"
+    - "group a streptococcus"
+  "staphylococcus aureus":
+    - "estafilococo aureus"
+    - "staph aureus"
+    - "estafilococo dorado"
+    - "mrsa"
+    - "sarm"
+  "mycobacterium tuberculosis":
+    - "tuberculosis"
+    - "bacilo de koch"
+    - "tbc"
+    - "tb"
+  "escherichia coli":
+    - "e coli"
+    - "ecoli"
+    - "colibacilo"
+    - "etec"
+    - "epec"
+    - "ehec"
+  "rotavirus":
+    - "diarrea por rotavirus"
+    - "gastroenteritis por rotavirus"
+  "virus inmunodeficiencia humana":
+    - "vih"
+    - "hiv"
+    - "sida"

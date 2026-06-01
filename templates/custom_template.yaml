@@ -1,0 +1,73 @@
+# ════════════════════════════════════════════════════════════════════════════
+# KaosExtract — Custom Template (Blank)
+# ════════════════════════════════════════════════════════════════════════════
+# Copy this file and fill in the fields for your domain.
+# Run: python kaosextract.py run --entity "YourEntity" --template your_template_name
+# ════════════════════════════════════════════════════════════════════════════
+
+name: "My Custom Domain"
+version: "1.0"
+language: "en"                   # "en" or "es"
+entity_label: "topic or entity"  # e.g. "drug", "disease", "concept", "species"
+output_language: "English"       # Output language for the LLM
+
+# System prompt for section generation
+system_prompt: >
+  You are an expert in [YOUR DOMAIN]. Generate ONE SPECIFIC SECTION of an analysis
+  with maximum technical depth. Continuous technical narrative, no intro or closing.
+  Each paragraph dense with domain-specific information.
+  NO generic lists. NO summaries. ONLY deep technical information.
+
+# System prompt for synthesis (combining parallel sections into one module)
+synthesis_prompt: >
+  You are a synthesis expert in [YOUR DOMAIN].
+  You receive specialized sections generated in parallel and unify them into ONE
+  coherent document. MANDATORY: preserve ALL technical information.
+  Only eliminate exact duplications. Perfect Markdown tables. Technical narrative.
+
+modules:
+  - id: 1
+    name: "Overview"
+    complexity: "standard"   # "standard" or "complex" (complex uses more powerful model)
+    sections:
+      - id: "DEF"
+        directive: >
+          Definition and classification of {ENTITY}. Taxonomy or categorization
+          within the domain. Scientific vs. common names.
+      - id: "HIS"
+        directive: >
+          Historical context: discovery, naming, key milestones.
+          Why {ENTITY} is relevant in the field.
+      # Add more sections as needed...
+
+  - id: 2
+    name: "Core Properties"
+    complexity: "standard"
+    sections:
+      - id: "STR"
+        directive: >
+          Structural properties of {ENTITY}: composition, organization,
+          key components and their molecular functions.
+      - id: "FNC"
+        directive: >
+          Functional properties: what {ENTITY} does, mechanisms of action,
+          interaction with biological/chemical systems.
+
+  - id: 3
+    name: "Applications and Implications"
+    complexity: "complex"
+    sections:
+      - id: "APP"
+        directive: >
+          Practical applications of {ENTITY} in the field.
+          Real-world use cases with quantitative outcomes where available.
+      - id: "IMP"
+        directive: >
+          Broader implications: societal, clinical, environmental, or economic
+          impact of {ENTITY}. Current debates in the field.
+
+# ── Search aliases ────────────────────────────────────────────────────────────
+# Optional: add alternative names/synonyms so the Dense Window Algorithm
+# can find relevant chapters even when books use different terminology.
+# Format: "canonical_name": ["alias1", "alias2"]
+search_aliases: {}
